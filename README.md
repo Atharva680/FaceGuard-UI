@@ -1,44 +1,49 @@
 # FaceGuard UI 🛡️🎥  
 ### Real-Time Face Detection & Event Recording System with Smart UI
 
-FaceGuard UI is a Python-based computer vision system designed for **events, offices, classrooms, and surveillance setups**.  
-It performs **real-time face detection**, **intelligent face capture**, and **long-duration video recording** with a clean and informative **live user interface (UI)**.
+FaceGuard UI is a **Python-based computer vision system** built using OpenCV for **real-time face detection, intelligent face capture, and long-duration event video recording**.
+
+The system is designed for **events, offices, classrooms, conferences, and surveillance environments**, providing a clean and informative **live user interface (UI)** with smart validation logic to reduce false detections.
 
 ---
 
-## ✨ Key Highlights
+## ✨ Key Features
 
-- 🎯 High-accuracy real-time face detection  
-- 📸 Smart face capture with cooldown & duplicate prevention  
-- 🧠 False-positive filtering (blur, size, ROI, geometry checks)  
-- 🎥 Long-duration recording (3–10 hours) with session handling  
-- 🖥️ Clean live UI with overlays & status indicators  
-- ⚡ Optimized for real-world environments (events & crowds)
+- 🎯 Real-time face detection using OpenCV
+- 📸 Automatic face image capture
+- 🔁 Cooldown-based duplicate prevention
+- 🧠 Smart face validation logic
+- 🎥 Long-duration video recording (3-hour sessions)
+- 🔄 Automatic session rollover
+- 🖥️ Live UI with bounding boxes and statistics
+- ⚙️ Multi-backend camera support (DSHOW / MSMF / ANY)
+- 📂 Organized output folders for faces and recordings
+- 🚀 Optimized for real-world usage
 
 ---
 
 ## 🖥️ Live UI Overview
 
-FaceGuard UI provides a **clear, operator-friendly interface** while running.
+The application runs with a **live preview window** showing detection results and system statistics.
 
-### 🔲 Bounding Box Colors
+### 🔲 Bounding Box Indicators
+
 | Color | Meaning |
-|-----|--------|
-| 🟩 Green | Face detected & image SAVED |
-| 🟨 Yellow | Face detected but in COOLDOWN |
-| 🟧 Orange | Face detected but REJECTED (blur / low quality) |
-| ⬜ Gray Box | Active ROI (Region of Interest) |
+|------|--------|
+| 🟩 Green | Face detected and image saved |
+| 🟨 Yellow | Face detected but in cooldown |
+| ⬛ Black Panel | Statistics overlay |
 
 ---
 
-### 📊 On-Screen Stats Panel (Top-Left)
+### 📊 On-Screen Statistics Panel
 
-Displays in real time:
-- **Total Faces Saved**
-- **Current Valid Faces**
-- **Session Time (minutes & seconds)**
+Displayed in the top-left corner:
+- **Total Saved Faces**
+- **Current Face Detections**
+- **Elapsed Session Time**
 
-This allows the operator to **monitor performance without checking logs**.
+This allows operators to monitor performance without checking logs.
 
 ---
 
@@ -46,22 +51,26 @@ This allows the operator to **monitor performance without checking logs**.
 
 | Key | Action |
 |----|-------|
-| **Q** | Stop recording & exit safely |
-| **R** | Toggle ROI overlay (if enabled) |
+| **Q** | Stop recording and exit safely |
 
 ---
 
 ## 📁 Project Structure
+
+```
+
 FaceGuard-UI/
-├── liveface.py # Live face detection & capture
-├── record_30min_with_overlay.py # 3-hour session video recorder
-├── probe_cams.py # Camera detection utility
-├── requirements.txt # Python dependencies
-├── README.md # Project documentation
-├── rec.txt # Recording notes
-├── event_faces/ # Captured face images
-├── recordings/ # Recorded event videos
-└── .github/ # GitHub workflows & templates
+├── liveface.py                      # Live face detection & capture
+├── record_30min_with_overlay.py     # 3-hour session video recorder with UI
+├── probe_cams.py                    # Camera detection utility
+├── requirements.txt                 # Python dependencies
+├── README.md                        # Project documentation
+├── rec.txt                          # Recording notes
+├── event_faces/                     # Captured face images
+├── recordings/                      # Recorded event videos
+└── .github/                         # GitHub workflows & templates
+
+````
 
 ---
 
@@ -69,11 +78,14 @@ FaceGuard-UI/
 
 ### 💻 Hardware
 - Webcam / USB camera / CCTV feed
-- Recommended: 720p or 1080p camera
+- Recommended resolution: **720p or 1080p**
 
 ### 🧪 Software
-- Python **3.8+**
-- Windows / Linux / macOS
+- **Python 3.8 or higher**
+- Supported OS:
+  - Windows
+  - Linux
+  - macOS
 
 ---
 
@@ -83,124 +95,159 @@ FaceGuard-UI/
 ```bash
 git clone https://github.com/your-username/FaceGuard-UI.git
 cd FaceGuard-UI
-2️⃣ Install Dependencies
+````
+
+### 2️⃣ Install Dependencies
+
+```bash
 pip install -r requirements.txt
+```
 
-🔍 Camera Check (Recommended)
+---
 
-Before running the main app:
+## 🔍 Camera Check (Recommended)
 
+Before running the main application, verify camera availability:
+
+```bash
 python probe_cams.py
+```
 
+This utility checks:
 
-This verifies:
+* Available camera indexes
+* Supported OpenCV camera backends (DSHOW / MSMF / ANY)
 
-Available camera indexes
+---
 
-Supported OpenCV backends (DSHOW / MSMF)
+## ▶️ Running the System
 
-▶️ Running the System
-🔴 Start Event Recording (3-Hour Sessions)
+### 🔴 Start Event Recording (3-Hour Sessions)
+
+```bash
 python record_30min_with_overlay.py
+```
 
-What Happens:
+### What Happens When You Run It
 
-Camera initializes with best backend
+1. Camera initializes using the best available backend
+2. Live preview window opens
+3. Face detection starts instantly
+4. Each detected face is:
 
-Live preview window opens
+   * Validated
+   * De-duplicated
+   * Saved automatically
+5. Video is recorded with overlays
+6. A new recording session starts automatically every 3 hours
+7. Press **Q** to stop safely
 
-Face detection starts instantly
+---
 
-Faces are:
+## 🧠 Smart Face Validation Logic
 
-Validated
+FaceGuard UI minimizes false detections and junk data using:
 
-De-duplicated
+* ✅ Minimum face size threshold
+* ✅ Aspect ratio validation
+* ✅ Blur detection (Laplacian variance)
+* ✅ Brightness thresholding
+* ✅ ROI-based detection focus
+* ✅ Cooldown-based duplicate prevention
 
-Saved automatically
+### Result
 
-Video is recorded with overlays
+* ✔ Clean face image dataset
+* ✔ Reduced false positives
+* ✔ Stable long-duration operation
 
-New session starts every 3 hours automatically
+---
 
-🧠 Smart Face Validation Logic
+## 📂 Output Details
 
-FaceGuard UI avoids junk detections using:
+### 📸 Captured Faces
 
-✅ Minimum face size check
+Saved in:
 
-✅ Aspect ratio validation
-
-✅ Blur detection (Laplacian variance)
-
-✅ Brightness thresholding
-
-✅ ROI gating (center-focused detection)
-
-✅ Cooldown-based duplicate prevention
-
-Result: Clean dataset, fewer false faces.
-
-📂 Output Details
-📸 Captured Faces
-
-Saved to:
-
+```
 event_faces/
+```
 
+Filename format:
 
-Format:
-
+```
 face_00023_20260210_143522_123.jpg
+```
 
-🎥 Recorded Videos
+---
 
-Saved to:
+### 🎥 Recorded Videos
 
+Saved in:
+
+```
 recordings/
+```
 
+Filename format:
 
-Format:
-
+```
 event_overlay_session2_20260210_120001.mp4
+```
 
-⚡ Performance Notes
+---
 
-CPU Usage: ~15–30%
+## ⚡ Performance Notes
 
-Disk: ~3GB per 3-hour session (720p @ 30 FPS)
+* **CPU Usage:** ~15–30% (depends on camera and resolution)
+* **Disk Usage:** ~3 GB per 3-hour session (720p @ 30 FPS)
+* **Face Capture Speed:** Less than 1 second per face
 
-Face Capture Speed: < 1 second per face
+---
 
-🧪 Best Practices
+## 🧪 Best Practices
 
-Ensure good lighting
+* Ensure good, even lighting
+* Place camera at eye level
+* Avoid strong backlighting
+* Test the system for 2–3 minutes before long sessions
+* Ensure sufficient disk space for long recordings
 
-Camera at eye level
+---
 
-Avoid backlight
+## 🚀 Use Cases
 
-Test for 2–3 minutes before long sessions
+* 🎓 College events & seminars
+* 🏢 Office attendance monitoring
+* 🎤 Conferences & expos
+* 🏫 Classrooms
+* 🛡️ Surveillance & monitoring
 
-🚀 Use Cases
+---
 
-🎓 College events & seminars
+## 🔮 Future Enhancements (Optional)
 
-🏢 Office attendance monitoring
+* Known vs Unknown face recognition
+* Attendance CSV export
+* Web-based dashboard
+* Deep learning models (FaceNet / ArcFace)
+* Cloud storage integration
 
-🎤 Conferences & expos
+---
 
-🏫 Classrooms
+## 📜 License
 
-🛡️ Surveillance & monitoring
+This project is released under the **MIT License**.
+You are free to use, modify, and distribute this project with proper attribution.
 
-📜 License
+---
 
-This project is released under the MIT License.
-You are free to use, modify, and distribute with attribution.
+## 🙌 Author
 
-🙌 Author
+**Developed by Atharva Shinde**
 
-Developed by Atharva shinde
+
+```
+
 
 
